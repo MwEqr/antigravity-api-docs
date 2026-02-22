@@ -744,17 +744,9 @@
         <!-- PLAYGROUND -->
         <div class="section" id="playground">
             <h2>🧪 Playground</h2>
-            <p>Teste prompts diretamente aqui. Conectado à API do Google Generative AI.</p>
+            <p>Teste prompts diretamente aqui. Conectado ao agente Antigravity local na sua VPS.</p>
 
-            <div class="playground">
-                <!-- API Key -->
-                <div class="pg-row">
-                    <div class="pg-col">
-                        <div class="pg-label">🔑 API Key (Google AI Studio)</div>
-                        <input type="password" class="pg-input" id="pgApiKey" placeholder="Cole sua API Key aqui...">
-                    </div>
-                </div>
-
+            <div class="playground" style="margin-top:20px;">
                 <!-- Model + Temperature -->
                 <div class="pg-row">
                     <div class="pg-col">
@@ -763,9 +755,19 @@
                             <optgroup label="⚡ Fast">
                                 <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
                                 <option value="gemini-2.5-flash">Gemini 2.5 Flash (Thinking)</option>
+                                <option value="gemini-3-flash">Gemini 3 Flash</option>
                             </optgroup>
                             <optgroup label="🧠 Planning">
                                 <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+                                <option value="gemini-3.1-pro" selected>Gemini 3.1 Pro</option>
+                            </optgroup>
+                            <optgroup label="🟠 Anthropic">
+                                <option value="claude-sonnet-4.6">Claude Sonnet 4.6</option>
+                                <option value="claude-opus-4.6">Claude Opus 4.6</option>
+                            </optgroup>
+                            <optgroup label="🤖 Default Clawdbot">
+                                <option value="clawdbot">ClawdBot (Auto)</option>
+                                <option value="gpt-oss-120b">GPT-OSS 120B</option>
                             </optgroup>
                         </select>
                     </div>
@@ -830,33 +832,25 @@
         <!-- OVERVIEW -->
         <div class="section" id="overview">
             <h2>📖 Visão Geral</h2>
-            <p>API REST para interagir com modelos de IA (Gemini, Claude, GPT). Envie prompts, anexe imagens, e receba
-                respostas inteligentes.</p>
+            <p>A API Antigravity é uma ponte direta para o agente IA interno rodando na VPS. Utiliza compatibilidade de
+                payload similar ao formato OpenAI.</p>
             <div class="badge-row">
                 <span class="badge"><span class="dot green"></span> Online</span>
-                <span class="badge">REST API</span>
+                <span class="badge">OpenAI-Compatible</span>
                 <span class="badge">Multimodal</span>
-                <span class="badge">Streaming</span>
             </div>
         </div>
 
         <!-- AUTH -->
         <div class="section" id="auth">
             <h2>🔑 Autenticação</h2>
-            <p>Obtenha uma API Key grátis em <a href="https://aistudio.google.com/apikey"
-                    style="color:var(--accent)">aistudio.google.com/apikey</a>.</p>
-            <div class="code-block">
-                <div class="code-header"><span class="code-lang">URL Base</span></div>
-                <pre>https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key=API_KEY</pre>
-            </div>
-            <div class="alert warn">
-                <strong>⚠️ Segurança:</strong> Nunca exponha sua API Key no frontend público.
-            </div>
+            <p>O endpoint de proxy fornecido (<code>/api.php</code>) autentica automaticamente de forma estática com o
+                serviço interno. <strong>Não é necessária API Key</strong> para testar a comunicação local.</p>
         </div>
 
         <!-- MODELS -->
         <div class="section" id="models">
-            <h2>🤖 Modelos Disponíveis</h2>
+            <h2>🤖 Modelos Disponíveis (Roteados pelo Agent)</h2>
             <h3>🔷 Google Gemini</h3>
             <table class="param-table">
                 <thead>
@@ -926,33 +920,14 @@
                     </tr>
                 </tbody>
             </table>
-            <h3>🟢 Open Source</h3>
-            <table class="param-table">
-                <thead>
-                    <tr>
-                        <th>Modelo</th>
-                        <th>Modo</th>
-                        <th>Uso</th>
-                        <th>Contexto</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><code>gpt-oss-120b</code></td>
-                        <td>⚖️ Medium</td>
-                        <td>Uso geral</td>
-                        <td>128K</td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
 
         <!-- GENERATE -->
         <div class="section" id="generate">
-            <h2>📤 Gerar Conteúdo</h2>
+            <h2>📤 Gerar Conteúdo (Chat Completions)</h2>
             <div class="endpoint-box">
                 <span class="method post">POST</span>
-                <span class="endpoint-url">/v1beta/models/{model}:generateContent</span>
+                <span class="endpoint-url">https://api-docs.encrypthost.com.br/api.php</span>
             </div>
             <table class="param-table">
                 <thead>
@@ -965,22 +940,16 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>contents</code></td>
+                        <td><code>model</code></td>
+                        <td>string</td>
+                        <td><span class="param-required">obrigatório</span></td>
+                        <td>O ID do modelo, ex: "clawdbot" ou "gemini-3.1-pro"</td>
+                    </tr>
+                    <tr>
+                        <td><code>messages</code></td>
                         <td>array</td>
                         <td><span class="param-required">obrigatório</span></td>
-                        <td>Array de mensagens (role + parts)</td>
-                    </tr>
-                    <tr>
-                        <td><code>generationConfig</code></td>
-                        <td>object</td>
-                        <td><span class="param-optional">opcional</span></td>
-                        <td>temperature, maxOutputTokens</td>
-                    </tr>
-                    <tr>
-                        <td><code>systemInstruction</code></td>
-                        <td>object</td>
-                        <td><span class="param-optional">opcional</span></td>
-                        <td>Instrução de sistema</td>
+                        <td>Array de mensagens em formato OpenAI (role, content)</td>
                     </tr>
                 </tbody>
             </table>
@@ -988,10 +957,14 @@
                 <div class="code-header"><span class="code-lang">cURL</span><button class="copy-btn"
                         onclick="copyCode(this)">Copiar</button></div>
                 <pre>curl -X POST \
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=API_KEY" \
+  "https://api-docs.encrypthost.com.br/api.php" \
   -H "Content-Type: application/json" \
   -d '{
-    "contents": [{"role":"user","parts":[{"text":"Olá, como vai?"}]}]
+    "model": "clawdbot",
+    "messages": [
+      {"role":"system", "content":"Seja conciso."},
+      {"role":"user", "content":"Olá, como vai?"}
+    ]
   }'</pre>
             </div>
         </div>
@@ -999,40 +972,43 @@
         <!-- IMAGES -->
         <div class="section" id="images">
             <h2>🖼️ Enviar Imagens</h2>
-            <p>Envie Base64 no campo <code>inline_data</code>:</p>
             <div class="code-block">
-                <div class="code-header"><span class="code-lang">JSON Body</span><button class="copy-btn"
+                <div class="code-header"><span class="code-lang">JSON Array</span><button class="copy-btn"
                         onclick="copyCode(this)">Copiar</button></div>
-                <pre>{"contents":[{"role":"user","parts":[
-  {"text":"Descreva esta imagem"},
-  {"inline_data":{"mime_type":"image/jpeg","data":"BASE64_AQUI"}}
-]}]}</pre>
+                <pre>{
+  "model": "clawdbot",
+  "messages": [{
+    "role": "user",
+    "content": [
+      {"type":"text", "text":"Descreva esta imagem"},
+      {"type":"image_url", "image_url":{"url":"data:image/jpeg;base64,AQUI"}}
+    ]
+  }]
+}</pre>
             </div>
-            <p>Formatos: <code>image/jpeg</code>, <code>image/png</code>, <code>image/webp</code>,
-                <code>image/gif</code>, <code>application/pdf</code></p>
         </div>
 
-        <!-- STREAMING -->
         <div class="section" id="stream">
             <h2>🌊 Streaming</h2>
-            <div class="endpoint-box">
-                <span class="method post">POST</span>
-                <span class="endpoint-url">/v1beta/models/{model}:streamGenerateContent?alt=sse</span>
-            </div>
-            <p>Receba tokens em tempo real via Server-Sent Events.</p>
+            <p>O endpoint via PHP por padrão retorna uma chamada em bloco único. O streaming de eventos WebSocket/SSE
+                completo com o Gateway deve ser configurado via cliente Node WS direto na porta <code>18789</code> no
+                futuro.</p>
         </div>
 
-        <!-- CHAT -->
         <div class="section" id="chat">
             <h2>💬 Chat Multi-turno</h2>
+            <p>Basta enviar o array de <code>messages</code> sucessivamente preenchido.</p>
             <div class="code-block">
                 <div class="code-header"><span class="code-lang">JSON</span><button class="copy-btn"
                         onclick="copyCode(this)">Copiar</button></div>
-                <pre>{"contents":[
-  {"role":"user","parts":[{"text":"O que é Docker?"}]},
-  {"role":"model","parts":[{"text":"Docker é uma plataforma..."}]},
-  {"role":"user","parts":[{"text":"E Kubernetes?"}]}
-]}</pre>
+                <pre>{
+  "model":"clawdbot",
+  "messages":[
+    {"role":"user","content":"O que é Docker?"},
+    {"role":"assistant","content":"Docker é uma plataforma..."},
+    {"role":"user","content":"E Kubernetes?"}
+  ]
+}</pre>
             </div>
         </div>
 
@@ -1043,38 +1019,35 @@
             <div class="code-block">
                 <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn"
                         onclick="copyCode(this)">Copiar</button></div>
-                <pre>import requests, base64
-API_KEY = "SUA_KEY"
-MODEL = "gemini-2.0-flash"
+                <pre>import requests
 
-def ask(prompt, image_path=None):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={API_KEY}"
-    parts = [{"text": prompt}]
-    if image_path:
-        b64 = base64.b64encode(open(image_path,"rb").read()).decode()
-        parts.append({"inline_data":{"mime_type":"image/jpeg","data":b64}})
-    r = requests.post(url, json={"contents":[{"role":"user","parts":parts}]})
-    return r.json()["candidates"][0]["content"]["parts"][0]["text"]
+url = "https://api-docs.encrypthost.com.br/api.php"
+data = {
+    "model": "gemini-3.1-pro",
+    "messages": [{"role": "user", "content": "Relatório do servidor"}]
+}
 
-print(ask("Relatório do servidor"))</pre>
+r = requests.post(url, json=data)
+print(r.json()["choices"][0]["message"]["content"])</pre>
             </div>
 
             <h3 id="ex-js">📦 JavaScript</h3>
             <div class="code-block">
                 <div class="code-header"><span class="code-lang">JavaScript</span><button class="copy-btn"
                         onclick="copyCode(this)">Copiar</button></div>
-                <pre>const API_KEY = 'SUA_KEY';
-const MODEL = 'gemini-2.0-flash';
-
-async function ask(prompt) {
-  const r = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`,
-    { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}]}) }
-  );
-  const d = await r.json();
-  return d.candidates[0].content.parts[0].text;
+                <pre>async function ask(prompt) {
+  const r = await fetch('https://api-docs.encrypthost.com.br/api.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'clawdbot',
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await r.json();
+  return data.choices[0].message.content;
 }
+
 ask('Olá!').then(console.log);</pre>
             </div>
 
@@ -1083,17 +1056,18 @@ ask('Olá!').then(console.log);</pre>
                 <div class="code-header"><span class="code-lang">PHP</span><button class="copy-btn"
                         onclick="copyCode(this)">Copiar</button></div>
                 <pre>&lt;?php
-$key = 'SUA_KEY';
-$model = 'gemini-2.0-flash';
-$ch = curl_init("https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$key");
+$ch = curl_init("https://api-docs.encrypthost.com.br/api.php");
+$data = ['model' => 'clawdbot', 'messages' => [['role'=>'user', 'content'=>'Olá!']]];
+
 curl_setopt_array($ch, [
     CURLOPT_POST => true,
     CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-    CURLOPT_POSTFIELDS => json_encode(['contents'=>[['role'=>'user','parts'=>[['text'=>'Olá!']]]]]),
+    CURLOPT_POSTFIELDS => json_encode($data),
     CURLOPT_RETURNTRANSFER => true
 ]);
-$r = json_decode(curl_exec($ch), true);
-echo $r['candidates'][0]['content']['parts'][0]['text'];</pre>
+
+$response = json_decode(curl_exec($ch), true);
+echo $response['choices'][0]['message']['content'];</pre>
             </div>
         </div>
 
@@ -1167,182 +1141,190 @@ echo $r['candidates'][0]['content']['parts'][0]['text'];</pre>
     </main>
 
     <script>
-// AUTH
-const VALID_USER = 'yuri';
-const VALID_PASS = '$Mdwy06151931';
-let fileB64 = null;
-let fileMime = null;
+        // AUTH
+        const VALID_USER = 'yuri';
+        const VALID_PASS = '$Mdwy06151931';
+        let fileB64 = null;
+        let fileMime = null;
 
-function checkAuth() {
-    if (sessionStorage.getItem('ag_auth') === 'ok') showApp();
-}
-
-function doLogin() {
-    const u = document.getElementById('loginUser').value;
-    const p = document.getElementById('loginPass').value;
-    if (u === VALID_USER && p === VALID_PASS) {
-        sessionStorage.setItem('ag_auth', 'ok');
-        showApp();
-    } else {
-        document.getElementById('loginError').style.display = 'block';
-    }
-}
-
-function doLogout() {
-    sessionStorage.removeItem('ag_auth');
-    location.reload();
-}
-
-function showApp() {
-    document.getElementById('loginOverlay').classList.add('hidden');
-    document.getElementById('sidebar').style.display = 'block';
-    document.getElementById('mainContent').style.display = 'block';
-    // Load saved API key
-    const saved = localStorage.getItem('ag_apikey');
-    if (saved) document.getElementById('pgApiKey').value = saved;
-}
-
-// ENTER key on login
-document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-
-// EXAMPLES
-const examples = {
-    vps: {
-        system: 'Você é um administrador de sistemas Linux expert. Responda em português.',
-        prompt: 'Gere um relatório completo da VPS: uso de CPU, memória, disco, serviços ativos, portas abertas, e recomendações de segurança. Formato: Markdown com tabelas.'
-    },
-    nginx: {
-        system: 'Você é um expert em Nginx e servidores web.',
-        prompt: 'Crie uma configuração Nginx otimizada para produção com: reverse proxy para Node.js na porta 3000, SSL via Cloudflare, gzip, headers de segurança, rate limiting, e cache de assets estáticos.'
-    },
-    security: {
-        system: 'Você é um especialista em segurança de servidores.',
-        prompt: 'Faça uma análise de segurança para um servidor Ubuntu com aaPanel: verifique SSH, firewall UFW, permissões de arquivos, serviços desnecessários, e crie um script de hardening completo.'
-    },
-    landing: {
-        system: 'Você é um web designer expert em landing pages premium.',
-        prompt: 'Crie o HTML/CSS completo de uma landing page moderna para uma empresa de tecnologia. Use design dark, glassmorphism, gradientes vibrantes, animações suaves, e mobile-first.'
-    },
-    debug: {
-        system: 'Você é um desenvolvedor PHP sênior.',
-        prompt: 'Analise este erro PHP e explique a causa raiz:\n\nFatal error: Uncaught PDOException: SQLSTATE[HY000] [2002] Connection refused\n\nInclua: causa provável, como diagnosticar, e como corrigir permanentemente.'
-    },
-    sql: {
-        system: 'Você é um DBA MySQL expert.',
-        prompt: 'Crie queries SQL otimizadas para: 1) Buscar top 10 clientes por valor de pedidos nos últimos 30 dias, 2) Relatório de produtos mais vendidos por categoria, 3) Análise de crescimento mês a mês. Use JOINs, subqueries e window functions.'
-    }
-};
-
-function setExample(key) {
-    const ex = examples[key];
-    document.getElementById('pgSystem').value = ex.system;
-    document.getElementById('pgPrompt').value = ex.prompt;
-}
-
-// FILE
-function handleFile(input) {
-    const file = input.files[0];
-    if (!file) return;
-    document.getElementById('pgFileName').textContent = file.name;
-    fileMime = file.type;
-    const reader = new FileReader();
-    reader.onload = e => {
-        fileB64 = e.target.result.split(',')[1];
-        document.getElementById('imgPreviewContainer').innerHTML =
-            '<img src="'+e.target.result+'" class="img-preview">';
-    };
-    reader.readAsDataURL(file);
-}
-
-// SEND PROMPT
-async function sendPrompt() {
-    const apiKey = document.getElementById('pgApiKey').value.trim();
-    if (!apiKey) { alert('Cole sua API Key primeiro!'); return; }
-    localStorage.setItem('ag_apikey', apiKey);
-
-    const model = document.getElementById('pgModel').value;
-    const temp = parseFloat(document.getElementById('pgTemp').value);
-    const maxTokens = parseInt(document.getElementById('pgMaxTokens').value);
-    const system = document.getElementById('pgSystem').value.trim();
-    const prompt = document.getElementById('pgPrompt').value.trim();
-    if (!prompt) { alert('Digite um prompt!'); return; }
-
-    const btn = document.getElementById('pgSendBtn');
-    const resp = document.getElementById('pgResponse');
-    const body = document.getElementById('respBody');
-
-    btn.disabled = true;
-    document.getElementById('sendIcon').textContent = '⏳';
-    resp.classList.add('visible');
-    body.innerHTML = '<div class="pg-loading"><div class="spinner"></div>Gerando resposta com '+model+'...</div>';
-    document.getElementById('respModel').textContent = model;
-    document.getElementById('respMeta').textContent = '';
-
-    const parts = [{text: prompt}];
-    if (fileB64) parts.push({inline_data:{mime_type:fileMime,data:fileB64}});
-
-    const reqBody = {
-        contents: [{role:'user', parts}],
-        generationConfig: {temperature:temp, maxOutputTokens:maxTokens}
-    };
-    if (system) reqBody.systemInstruction = {parts:[{text:system}]};
-
-    const t0 = Date.now();
-    try {
-        const r = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-            { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(reqBody) }
-        );
-        const data = await r.json();
-        const elapsed = ((Date.now()-t0)/1000).toFixed(1);
-
-        if (data.error) {
-            body.textContent = '❌ Erro '+data.error.code+': '+data.error.message;
-            document.getElementById('respMeta').textContent = elapsed+'s';
-        } else if (data.candidates && data.candidates[0]) {
-            const text = data.candidates[0].content.parts[0].text;
-            body.textContent = text;
-            const usage = data.usageMetadata || {};
-            document.getElementById('respMeta').textContent =
-                `${elapsed}s · ${usage.promptTokenCount||'?'} in · ${usage.candidatesTokenCount||'?'} out · ${usage.totalTokenCount||'?'} total`;
-        } else {
-            body.textContent = '⚠️ Resposta inesperada: ' + JSON.stringify(data, null, 2);
+        function checkAuth() {
+            if (sessionStorage.getItem('ag_auth') === 'ok') showApp();
         }
-    } catch(e) {
-        body.textContent = '❌ Erro de rede: ' + e.message;
-    }
 
-    btn.disabled = false;
-    document.getElementById('sendIcon').textContent = '▶';
-}
+        function doLogin() {
+            const u = document.getElementById('loginUser').value;
+            const p = document.getElementById('loginPass').value;
+            if (u === VALID_USER && p === VALID_PASS) {
+                sessionStorage.setItem('ag_auth', 'ok');
+                showApp();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
 
-// COPY
-function copyCode(btn) {
-    const pre = btn.closest('.code-block').querySelector('pre');
-    navigator.clipboard.writeText(pre.textContent);
-    btn.textContent = '✓ Copiado!';
-    setTimeout(() => btn.textContent = 'Copiar', 2000);
-}
+        function doLogout() {
+            sessionStorage.removeItem('ag_auth');
+            location.reload();
+        }
 
-// NAV SCROLL
-const sections = document.querySelectorAll('.section');
-const navLinks = document.querySelectorAll('.nav-a');
-window.addEventListener('scroll', () => {
-    let cur = '';
-    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
-    navLinks.forEach(l => {
-        l.classList.remove('active');
-        if (l.getAttribute('href') === '#'+cur) l.classList.add('active');
-    });
-});
+        function showApp() {
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('sidebar').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'block';
+        }
 
-// Ctrl+Enter to send
-document.getElementById('pgPrompt').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sendPrompt();
-});
+        // ENTER key on login
+        document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
-// Init
-checkAuth();
+        // EXAMPLES
+        const examples = {
+            vps: {
+                system: 'Você é um administrador de sistemas Linux expert. Responda em português.',
+                prompt: 'Gere um relatório completo da VPS: uso de CPU, memória, disco, serviços ativos, portas abertas, e recomendações de segurança. Formato: Markdown com tabelas.'
+            },
+            nginx: {
+                system: 'Você é um expert em Nginx e servidores web.',
+                prompt: 'Crie uma configuração Nginx otimizada para produção com: reverse proxy para Node.js na porta 3000, SSL via Cloudflare, gzip, headers de segurança, rate limiting, e cache de assets estáticos.'
+            },
+            security: {
+                system: 'Você é um especialista em segurança de servidores.',
+                prompt: 'Faça uma análise de segurança para um servidor Ubuntu com aaPanel: verifique SSH, firewall UFW, permissões de arquivos, serviços desnecessários, e crie um script de hardening completo.'
+            },
+            landing: {
+                system: 'Você é um web designer expert em landing pages premium.',
+                prompt: 'Crie o HTML/CSS completo de uma landing page moderna para uma empresa de tecnologia. Use design dark, glassmorphism, gradientes vibrantes, animações suaves, e mobile-first.'
+            },
+            debug: {
+                system: 'Você é um desenvolvedor PHP sênior.',
+                prompt: 'Analise este erro PHP e explique a causa raiz:\n\nFatal error: Uncaught PDOException: SQLSTATE[HY000] [2002] Connection refused\n\nInclua: causa provável, como diagnosticar, e como corrigir permanentemente.'
+            },
+            sql: {
+                system: 'Você é um DBA MySQL expert.',
+                prompt: 'Crie queries SQL otimizadas para: 1) Buscar top 10 clientes por valor de pedidos nos últimos 30 dias, 2) Relatório de produtos mais vendidos por categoria, 3) Análise de crescimento mês a mês. Use JOINs, subqueries e window functions.'
+            }
+        };
+
+        function setExample(key) {
+            const ex = examples[key];
+            document.getElementById('pgSystem').value = ex.system;
+            document.getElementById('pgPrompt').value = ex.prompt;
+        }
+
+        // FILE
+        function handleFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+            document.getElementById('pgFileName').textContent = file.name;
+            fileMime = file.type;
+            const reader = new FileReader();
+            reader.onload = e => {
+                fileB64 = e.target.result.split(',')[1];
+                document.getElementById('imgPreviewContainer').innerHTML =
+                    '<img src="' + e.target.result + '" class="img-preview">';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // SEND PROMPT
+        async function sendPrompt() {
+            const model = document.getElementById('pgModel').value;
+            const temp = parseFloat(document.getElementById('pgTemp').value);
+            const maxTokens = parseInt(document.getElementById('pgMaxTokens').value);
+            const system = document.getElementById('pgSystem').value.trim();
+            const prompt = document.getElementById('pgPrompt').value.trim();
+            if (!prompt) { alert('Digite um prompt!'); return; }
+
+            const btn = document.getElementById('pgSendBtn');
+            const resp = document.getElementById('pgResponse');
+            const body = document.getElementById('respBody');
+
+            btn.disabled = true;
+            document.getElementById('sendIcon').textContent = '⏳';
+            resp.classList.add('visible');
+            body.innerHTML = '<div class="pg-loading"><div class="spinner"></div>Enviando para o Antigravity Local...</div>';
+            document.getElementById('respModel').textContent = model;
+            document.getElementById('respMeta').textContent = '';
+
+            // Formato OpenAI
+            let messages = [];
+            if (system) {
+                messages.push({ role: 'system', content: system });
+            }
+
+            if (fileB64) {
+                messages.push({
+                    role: 'user',
+                    content: [
+                        { type: 'text', text: prompt },
+                        { type: 'image_url', image_url: { url: `data:${fileMime};base64,${fileB64}` } }
+                    ]
+                });
+            } else {
+                messages.push({ role: 'user', content: prompt });
+            }
+
+            const reqBody = {
+                model: model,
+                messages: messages
+            };
+
+            const t0 = Date.now();
+            try {
+                const r = await fetch('/api.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(reqBody)
+                });
+                const data = await r.json();
+                const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+
+                if (data.error) {
+                    body.textContent = '❌ Erro: ' + (data.error.message || data.error);
+                    document.getElementById('respMeta').textContent = elapsed + 's';
+                } else if (data.choices && data.choices[0]) {
+                    const text = data.choices[0].message.content;
+                    body.textContent = text;
+                    const usage = data.usage || {};
+                    document.getElementById('respMeta').textContent =
+                        `${elapsed}s · ${usage.prompt_tokens || '?'} in · ${usage.completion_tokens || '?'} out`;
+                } else {
+                    body.textContent = '⚠️ Resposta inesperada: ' + JSON.stringify(data, null, 2);
+                }
+            } catch (e) {
+                body.textContent = '❌ Erro de conexão com o Proxy PHP: ' + e.message;
+            }
+
+            btn.disabled = false;
+            document.getElementById('sendIcon').textContent = '▶';
+        }
+
+        // COPY
+        function copyCode(btn) {
+            const pre = btn.closest('.code-block').querySelector('pre');
+            navigator.clipboard.writeText(pre.textContent);
+            btn.textContent = '✓ Copiado!';
+            setTimeout(() => btn.textContent = 'Copiar', 2000);
+        }
+
+        // NAV SCROLL
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-a');
+        window.addEventListener('scroll', () => {
+            let cur = '';
+            sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+            navLinks.forEach(l => {
+                l.classList.remove('active');
+                if (l.getAttribute('href') === '#' + cur) l.classList.add('active');
+            });
+        });
+
+        // Ctrl+Enter to send
+        document.getElementById('pgPrompt').addEventListener('keydown', e => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sendPrompt();
+        });
+
+        // Init
+        checkAuth();
     </script>
 </body>
 
