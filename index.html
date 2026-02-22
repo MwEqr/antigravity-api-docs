@@ -482,7 +482,9 @@
         <!-- MODELS -->
         <div class="section" id="models">
             <h2>🤖 Modelos Disponíveis</h2>
-            <p>Escolha o modelo conforme sua necessidade de velocidade vs. qualidade:</p>
+            <p>Escolha o modelo conforme sua necessidade de velocidade, qualidade e provider:</p>
+
+            <h3>🔷 Google Gemini</h3>
             <table class="param-table">
                 <thead>
                     <tr>
@@ -494,7 +496,14 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>gemini-2.0-flash</code></td>
+                        <td><code>gemini-3.1-pro</code> <span
+                                style="color:var(--green);font-size:0.7rem;font-weight:700">NEW</span></td>
+                        <td>🧠 High / Low</td>
+                        <td>Código complexo, análise profunda, raciocínio avançado</td>
+                        <td>2M tokens</td>
+                    </tr>
+                    <tr>
+                        <td><code>gemini-3-flash</code></td>
                         <td>⚡ Fast</td>
                         <td>Respostas rápidas, chat, tarefas simples</td>
                         <td>1M tokens</td>
@@ -502,7 +511,7 @@
                     <tr>
                         <td><code>gemini-2.5-pro</code></td>
                         <td>🧠 Planning</td>
-                        <td>Código complexo, análise profunda, raciocínio</td>
+                        <td>Código complexo, planejamento detalhado</td>
                         <td>1M tokens</td>
                     </tr>
                     <tr>
@@ -511,11 +520,65 @@
                         <td>Equilíbrio velocidade/qualidade com thinking</td>
                         <td>1M tokens</td>
                     </tr>
+                    <tr>
+                        <td><code>gemini-2.0-flash</code></td>
+                        <td>⚡ Fast</td>
+                        <td>Respostas ultra-rápidas, tarefas leves</td>
+                        <td>1M tokens</td>
+                    </tr>
                 </tbody>
             </table>
+
+            <h3>🟠 Anthropic Claude</h3>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Modo</th>
+                        <th>Ideal Para</th>
+                        <th>Contexto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>claude-sonnet-4.6</code></td>
+                        <td>🧠 Thinking</td>
+                        <td>Código, análise, raciocínio com chain-of-thought</td>
+                        <td>200K tokens</td>
+                    </tr>
+                    <tr>
+                        <td><code>claude-opus-4.6</code></td>
+                        <td>🧠 Thinking</td>
+                        <td>Tarefas complexas, máxima qualidade, criatividade</td>
+                        <td>200K tokens</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🟢 Open Source</h3>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Modo</th>
+                        <th>Ideal Para</th>
+                        <th>Contexto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>gpt-oss-120b</code></td>
+                        <td>⚖️ Medium</td>
+                        <td>Uso geral, boa relação custo/qualidade</td>
+                        <td>128K tokens</td>
+                    </tr>
+                </tbody>
+            </table>
+
             <div class="alert info">
-                <strong>💡 Dica:</strong> Use <code>gemini-2.0-flash</code> para respostas rápidas (modo "fast") e
-                <code>gemini-2.5-pro</code> para tarefas que exigem planejamento (modo "planning").
+                <strong>💡 Dica:</strong> Use <code>gemini-3-flash</code> para respostas rápidas (modo "fast"),
+                <code>gemini-3.1-pro</code> ou <code>claude-opus-4.6</code> para tarefas que exigem planejamento (modo
+                "planning/thinking").
             </div>
         </div>
 
