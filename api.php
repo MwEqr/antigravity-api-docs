@@ -24,21 +24,12 @@ if (!$data || !isset($data['messages'])) {
     exit;
 }
 
-// --- CONFIGURAÇÃO GEMINI ---
-// API Key obtida em: https://aistudio.google.com/app/apikey
-$geminiApiKey = 'COLOQUE_SUA_API_KEY_AQUI'; 
-
-$model = $data['model'] ?? 'gemini-3.1-pro'; // Fallback
-// Mapeamento caso o dropdown venha "clawdbot"
-if ($model === 'clawdbot' || strpos($model, 'gpt-') !== false || strpos($model, 'claude-') !== false) {
-    $model = 'gemini-3.1-pro';
-}
-
-// O Google provê um endpoint 100% compatível com o formato OpenAI nativamente nas versões v1beta
-$apiUrl = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
+// --- CONFIGURAÇÃO GEMINI LOCAL AUTH HUB ---
+// O servidor gemini-oauth-server.js roda na porta 18790 e gerencia o OAuth2
+$apiUrl = 'http://127.0.0.1:18790/v1/chat/completions';
 
 $payload = [
-    "model" => $model,
+    "model" => $data['model'] ?? 'gemini-1.5-pro',
     "messages" => $data['messages'],
     "stream" => false
 ];
@@ -48,8 +39,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Content-Type: application/json',
-    'Authorization: Bearer ' . $geminiApiKey
+    'Content-Type: application/json'
 ]);
 
 $response = curl_exec($ch);
@@ -59,7 +49,7 @@ curl_close($ch);
 
 if ($error) {
     http_response_code(500);
-    echo json_encode(["error" => "Failed to reach Gemini API: " . $error]);
+    echo json_encode(["error" => "Failed to reach local Gemini Auth server: " . $error]);
     exit;
 }
 
