@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antigravity API - Documentação</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a2e;
+            --bg-code: #0d1117;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.3);
+            --accent-secondary: #06b6d4;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --border: rgba(255, 255, 255, 0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        code,
+        pre {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 32px 24px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-version {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+            margin-bottom: 2px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 280px;
+            padding: 48px 64px;
+            max-width: 960px;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 48px 0 40px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 48px;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+        }
+
+        .badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .badge .dot.green {
+            background: var(--green);
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 56px;
+            scroll-margin-top: 24px;
+        }
+
+        .section h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin: 28px 0 12px;
+            color: #fff;
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin: 16px 0 24px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-lang {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .copy-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .copy-btn:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .code-block pre {
+            padding: 16px 20px;
+            overflow-x: auto;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        /* Method badges */
+        .method {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .method.post {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--green);
+        }
+
+        .method.get {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--blue);
+        }
+
+        /* Endpoint */
+        .endpoint-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 20px;
+            margin: 12px 0 20px;
+        }
+
+        .endpoint-url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        /* Tables */
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: 0.85rem;
+        }
+
+        .param-table th {
+            text-align: left;
+            padding: 10px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+
+        .param-table td {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .param-table code {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .param-required {
+            color: var(--red);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .param-optional {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Alert boxes */
+        .alert {
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            margin: 16px 0;
+            border-left: 4px solid;
+            font-size: 0.85rem;
+        }
+
+        .alert.info {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: var(--blue);
+        }
+
+        .alert.warn {
+            background: rgba(245, 158, 11, 0.08);
+            border-color: var(--orange);
+        }
+
+        .alert strong {
+            color: #fff;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 0;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            border-radius: var(--radius) var(--radius) 0 0;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--bg-code);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tabbed-code .code-block {
+            border-radius: 0 var(--radius) var(--radius) var(--radius);
+            margin-top: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 24px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-logo">⚡ Antigravity API</div>
+        <div class="sidebar-version">v1.0 · Gemini Models</div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Início</div>
+            <a href="#overview" class="nav-link active">Visão Geral</a>
+            <a href="#auth" class="nav-link">Autenticação</a>
+            <a href="#models" class="nav-link">Modelos</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-title">Endpoints</div>
+            <a href="#generate" class="nav-link">Gerar Conteúdo</a>
+            <a href="#images" class="nav-link">Enviar Imagens</a>
+            <a href="#stream" class="nav-link">Streaming</a>
+            <a href="#chat" class="nav-link">Chat Multi-turno</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-title">Exemplos</div>
+            <a href="#ex-curl" class="nav-link">cURL</a>
+            <a href="#ex-python" class="nav-link">Python</a>
+            <a href="#ex-js" class="nav-link">JavaScript</a>
+            <a href="#ex-php" class="nav-link">PHP</a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-title">Referência</div>
+            <a href="#errors" class="nav-link">Erros</a>
+            <a href="#limits" class="nav-link">Limites</a>
+        </div>
+    </nav>
+
+    <main class="main">
+
+        <!-- HERO -->
+        <div class="hero" id="overview">
+            <h1>Antigravity API</h1>
+            <p>Documentação completa para interagir com os modelos Gemini programaticamente. Envie prompts, anexe
+                imagens, escolha entre modo rápido ou planejamento, e receba respostas inteligentes.</p>
+            <div class="badge-row">
+                <span class="badge"><span class="dot green"></span> API Operacional</span>
+                <span class="badge">REST API</span>
+                <span class="badge">Multimodal</span>
+                <span class="badge">Streaming</span>
+            </div>
+        </div>
+
+        <!-- AUTH -->
+        <div class="section" id="auth">
+            <h2>🔑 Autenticação</h2>
+            <p>Todas as requisições exigem uma <strong>API Key</strong> do Google AI Studio. Obtenha a sua em <a
+                    href="https://aistudio.google.com/apikey" style="color:var(--accent)">aistudio.google.com/apikey</a>
+                (grátis).</p>
+            <p>A chave é passada como query parameter <code>key</code> na URL:</p>
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">URL</span></div>
+                <pre>https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key=SUA_API_KEY</pre>
+            </div>
+            <div class="alert warn">
+                <strong>⚠️ Segurança:</strong> Nunca exponha sua API Key no frontend. Use-a apenas no backend/servidor.
+            </div>
+        </div>
+
+        <!-- MODELS -->
+        <div class="section" id="models">
+            <h2>🤖 Modelos Disponíveis</h2>
+            <p>Escolha o modelo conforme sua necessidade de velocidade vs. qualidade:</p>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Modo</th>
+                        <th>Ideal Para</th>
+                        <th>Contexto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>gemini-2.0-flash</code></td>
+                        <td>⚡ Fast</td>
+                        <td>Respostas rápidas, chat, tarefas simples</td>
+                        <td>1M tokens</td>
+                    </tr>
+                    <tr>
+                        <td><code>gemini-2.5-pro</code></td>
+                        <td>🧠 Planning</td>
+                        <td>Código complexo, análise profunda, raciocínio</td>
+                        <td>1M tokens</td>
+                    </tr>
+                    <tr>
+                        <td><code>gemini-2.5-flash</code></td>
+                        <td>⚡🧠 Hybrid</td>
+                        <td>Equilíbrio velocidade/qualidade com thinking</td>
+                        <td>1M tokens</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="alert info">
+                <strong>💡 Dica:</strong> Use <code>gemini-2.0-flash</code> para respostas rápidas (modo "fast") e
+                <code>gemini-2.5-pro</code> para tarefas que exigem planejamento (modo "planning").
+            </div>
+        </div>
+
+        <!-- GENERATE -->
+        <div class="section" id="generate">
+            <h2>📤 Gerar Conteúdo</h2>
+            <div class="endpoint-box">
+                <span class="method post">POST</span>
+                <span class="endpoint-url">/v1beta/models/{model}:generateContent</span>
+            </div>
+
+            <h3>Parâmetros do Body (JSON)</h3>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Campo</th>
+                        <th>Tipo</th>
+                        <th>Status</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>contents</code></td>
+                        <td>array</td>
+                        <td><span class="param-required">obrigatório</span></td>
+                        <td>Array de mensagens com <code>role</code> e <code>parts</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>contents[].role</code></td>
+                        <td>string</td>
+                        <td><span class="param-required">obrigatório</span></td>
+                        <td><code>"user"</code> ou <code>"model"</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>contents[].parts</code></td>
+                        <td>array</td>
+                        <td><span class="param-required">obrigatório</span></td>
+                        <td>Array com <code>text</code> e/ou <code>inline_data</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>generationConfig</code></td>
+                        <td>object</td>
+                        <td><span class="param-optional">opcional</span></td>
+                        <td>Controla temperature, maxOutputTokens, etc.</td>
+                    </tr>
+                    <tr>
+                        <td><code>systemInstruction</code></td>
+                        <td>object</td>
+                        <td><span class="param-optional">opcional</span></td>
+                        <td>Instrução de sistema (persona/contexto)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Exemplo Básico – Texto Simples</h3>
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">cURL</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copiar</button></div>
+                <pre>curl -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=SUA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents": [{
+      "role": "user",
+      "parts": [{"text": "Explique o que é reverse proxy em 3 linhas"}]
+    }]
+  }'</pre>
+            </div>
+
+            <h3>Resposta</h3>
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">JSON Response</span></div>
+                <pre>{
+  "candidates": [{
+    "content": {
+      "parts": [{"text": "Um reverse proxy é um servidor..."}],
+      "role": "model"
+    },
+    "finishReason": "STOP"
+  }],
+  "usageMetadata": {
+    "promptTokenCount": 12,
+    "candidatesTokenCount": 85,
+    "totalTokenCount": 97
+  }
+}</pre>
+            </div>
+        </div>
+
+        <!-- IMAGES -->
+        <div class="section" id="images">
+            <h2>🖼️ Enviar Imagens</h2>
+            <p>O Gemini é multimodal — envie imagens junto com texto usando <code>inline_data</code> em Base64:</p>
+
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">cURL – Imagem + Texto</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copiar</button></div>
+                <pre># Converta a imagem para Base64 primeiro:
+# BASE64=$(base64 -w0 imagem.jpg)
+
+curl -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=SUA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents": [{
+      "role": "user",
+      "parts": [
+        {"text": "Descreva o que você vê nesta imagem"},
+        {
+          "inline_data": {
+            "mime_type": "image/jpeg",
+            "data": "'$BASE64'"
+          }
+        }
+      ]
+    }]
+  }'</pre>
+            </div>
+
+            <h3>MIME Types Suportados</h3>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Formato</th>
+                        <th>MIME Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>JPEG</td>
+                        <td><code>image/jpeg</code></td>
+                    </tr>
+                    <tr>
+                        <td>PNG</td>
+                        <td><code>image/png</code></td>
+                    </tr>
+                    <tr>
+                        <td>WebP</td>
+                        <td><code>image/webp</code></td>
+                    </tr>
+                    <tr>
+                        <td>GIF</td>
+                        <td><code>image/gif</code></td>
+                    </tr>
+                    <tr>
+                        <td>PDF</td>
+                        <td><code>application/pdf</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert info">
+                <strong>💡 Múltiplas imagens:</strong> Adicione vários objetos <code>inline_data</code> no array
+                <code>parts</code> para enviar mais de uma imagem.
+            </div>
+        </div>
+
+        <!-- STREAMING -->
+        <div class="section" id="stream">
+            <h2>🌊 Streaming (Resposta em Tempo Real)</h2>
+            <p>Use <code>streamGenerateContent</code> para receber a resposta token por token via SSE:</p>
+            <div class="endpoint-box">
+                <span class="method post">POST</span>
+                <span class="endpoint-url">/v1beta/models/{model}:streamGenerateContent?alt=sse</span>
+            </div>
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">cURL – Streaming</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copiar</button></div>
+                <pre>curl -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:streamGenerateContent?alt=sse&key=SUA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents": [{
+      "role": "user",
+      "parts": [{"text": "Crie um site landing page em HTML"}]
+    }]
+  }'</pre>
+            </div>
+        </div>
+
+        <!-- CHAT MULTI-TURN -->
+        <div class="section" id="chat">
+            <h2>💬 Chat Multi-turno</h2>
+            <p>Para conversação contínua, envie o histórico completo no array <code>contents</code>:</p>
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">JSON – Histórico de Chat</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copiar</button></div>
+                <pre>{
+  "systemInstruction": {
+    "parts": [{"text": "Você é um assistente de programação expert em PHP."}]
+  },
+  "contents": [
+    {"role": "user", "parts": [{"text": "Como fazer uma conexão PDO?"}]},
+    {"role": "model", "parts": [{"text": "Para conectar via PDO: $pdo = new PDO(...)"}]},
+    {"role": "user", "parts": [{"text": "Agora me mostre com prepared statements"}]}
+  ],
+  "generationConfig": {
+    "temperature": 0.7,
+    "maxOutputTokens": 8192
+  }
+}</pre>
+            </div>
+        </div>
+
+        <!-- EXEMPLOS COMPLETOS -->
+        <div class="section" id="ex-curl">
+            <h2>📋 Exemplos Completos</h2>
+
+            <h3 id="ex-python">🐍 Python</h3>
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copiar</button></div>
+                <pre>import requests, base64, json
+
+API_KEY = "SUA_API_KEY"
+MODEL = "gemini-2.0-flash"  # ou "gemini-2.5-pro" para planning
+
+def ask(prompt, image_path=None):
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={API_KEY}"
+    
+    parts = [{"text": prompt}]
+    
+    if image_path:
+        with open(image_path, "rb") as f:
+            b64 = base64.b64encode(f.read()).decode()
+        parts.append({
+            "inline_data": {"mime_type": "image/jpeg", "data": b64}
+        })
+    
+    body = {
+        "contents": [{"role": "user", "parts": parts}],
+        "generationConfig": {
+            "temperature": 0.7,
+            "maxOutputTokens": 8192
+        }
+    }
+    
+    r = requests.post(url, json=body)
+    data = r.json()
+    return data["candidates"][0]["content"]["parts"][0]["text"]
+
+# Uso simples (Fast mode)
+print(ask("O que é Docker?"))
+
+# Com imagem
+print(ask("Descreva essa imagem", "foto.jpg"))</pre>
+            </div>
+
+            <h3 id="ex-js">📦 JavaScript (Node.js)</h3>
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">JavaScript</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copiar</button></div>
+                <pre>const fs = require('fs');
+
+const API_KEY = 'SUA_API_KEY';
+const MODEL = 'gemini-2.0-flash'; // Fast mode
+// const MODEL = 'gemini-2.5-pro'; // Planning mode
+
+async function ask(prompt, imagePath = null) {
+  const parts = [{ text: prompt }];
+  
+  if (imagePath) {
+    const b64 = fs.readFileSync(imagePath).toString('base64');
+    parts.push({
+      inline_data: { mime_type: 'image/jpeg', data: b64 }
+    });
+  }
+  
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts }],
+        generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
+      })
+    }
+  );
+  
+  const data = await res.json();
+  return data.candidates[0].content.parts[0].text;
+}
+
+// Uso
+ask('Crie um componente React de login').then(console.log);</pre>
+            </div>
+
+            <h3 id="ex-php">🐘 PHP</h3>
+            <div class="code-block">
+                <div class="code-header"><span class="code-lang">PHP</span><button class="copy-btn"
+                        onclick="copyCode(this)">Copiar</button></div>
+                <pre>&lt;?php
+$apiKey = 'SUA_API_KEY';
+$model  = 'gemini-2.0-flash'; // Fast | 'gemini-2.5-pro' para Planning
+
+function askGemini(string $prompt, ?string $imagePath = null): string {
+    global $apiKey, $model;
+    
+    $parts = [['text' => $prompt]];
+    
+    if ($imagePath) {
+        $b64 = base64_encode(file_get_contents($imagePath));
+        $parts[] = [
+            'inline_data' => [
+                'mime_type' => 'image/jpeg',
+                'data' => $b64
+            ]
+        ];
+    }
+    
+    $body = json_encode([
+        'contents' => [['role' => 'user', 'parts' => $parts]],
+        'generationConfig' => [
+            'temperature' => 0.7,
+            'maxOutputTokens' => 8192
+        ]
+    ]);
+    
+    $ch = curl_init("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}");
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => $body,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 120
+    ]);
+    
+    $response = curl_exec($ch);
+    curl_close($ch);
+    
+    $data = json_decode($response, true);
+    return $data['candidates'][0]['content']['parts'][0]['text'] ?? 'Erro na resposta';
+}
+
+// Uso
+echo askGemini('Como configurar Nginx como reverse proxy?');
+echo askGemini('O que tem nessa imagem?', '/caminho/foto.jpg');</pre>
+            </div>
+        </div>
+
+        <!-- ERRORS -->
+        <div class="section" id="errors">
+            <h2>❌ Códigos de Erro</h2>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Significado</th>
+                        <th>Solução</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>400</code></td>
+                        <td>Request inválido</td>
+                        <td>Verifique o JSON do body</td>
+                    </tr>
+                    <tr>
+                        <td><code>401</code></td>
+                        <td>API Key inválida</td>
+                        <td>Gere uma nova key no AI Studio</td>
+                    </tr>
+                    <tr>
+                        <td><code>403</code></td>
+                        <td>Sem permissão</td>
+                        <td>Habilite a API no Google Cloud</td>
+                    </tr>
+                    <tr>
+                        <td><code>429</code></td>
+                        <td>Rate limit</td>
+                        <td>Aguarde e tente novamente (exponential backoff)</td>
+                    </tr>
+                    <tr>
+                        <td><code>500</code></td>
+                        <td>Erro do servidor</td>
+                        <td>Tente novamente em alguns segundos</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- LIMITS -->
+        <div class="section" id="limits">
+            <h2>📊 Limites</h2>
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Recurso</th>
+                        <th>Flash</th>
+                        <th>Pro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Requests/minuto (grátis)</td>
+                        <td>15</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>Tokens/minuto (grátis)</td>
+                        <td>1M</td>
+                        <td>250K</td>
+                    </tr>
+                    <tr>
+                        <td>Contexto máximo</td>
+                        <td>1M tokens</td>
+                        <td>1M tokens</td>
+                    </tr>
+                    <tr>
+                        <td>Output máximo</td>
+                        <td>8K tokens</td>
+                        <td>64K tokens</td>
+                    </tr>
+                    <tr>
+                        <td>Imagens por request</td>
+                        <td>3600</td>
+                        <td>3600</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="alert info">
+                <strong>💡 Plano pago:</strong> Para limites maiores, ative o billing no Google Cloud Console e use a
+                API via Vertex AI.
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function copyCode(btn) {
+            const pre = btn.closest('.code-block').querySelector('pre');
+            navigator.clipboard.writeText(pre.textContent);
+            btn.textContent = '✓ Copiado!';
+            setTimeout(() => btn.textContent = 'Copiar', 2000);
+        }
+
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('.section, .hero');
+        const navLinks = document.querySelectorAll('.nav-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(s => {
+                if (window.scrollY >= s.offsetTop - 100) current = s.id;
+            });
+            navLinks.forEach(l => {
+                l.classList.remove('active');
+                if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
